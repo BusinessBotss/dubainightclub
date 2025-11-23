@@ -1,0 +1,5 @@
+{
+  "name": "BeachClubOS",
+  "description": "A high-performance Beach Club Management System featuring interactive SVG bed mapping, real-time status updates, and revenue analytics.",
+  "requestFramePermissions": []
+}
