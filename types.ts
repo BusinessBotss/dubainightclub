@@ -1,16 +1,10 @@
 
-export enum TableStatus {
-  AVAILABLE = 'AVAILABLE', // Theme Primary outline
-  RESERVED = 'RESERVED',   // Theme Primary filled
-  OCCUPIED = 'OCCUPIED',   // Red/Secondary filled
-  LOCKED = 'LOCKED'        // Grey (Needs higher tier)
-}
 
-export enum BedStatus {
+export enum TableStatus {
   AVAILABLE = 'AVAILABLE',
-  BOOKED = 'BOOKED',
+  RESERVED = 'RESERVED',
   OCCUPIED = 'OCCUPIED',
-  MAINTENANCE = 'MAINTENANCE'
+  LOCKED = 'LOCKED'
 }
 
 export enum ZoneType {
@@ -18,24 +12,30 @@ export enum ZoneType {
   DANCE_FLOOR = 'DANCE_FLOOR',
   VIP_LOUNGE = 'VIP_LOUNGE',
   TERRACE = 'TERRACE',
-  BOOTH = 'BOOTH',
-  GENERAL = 'GENERAL'
+  BOOTH = 'BOOTH'
 }
 
 export interface ClubTheme {
-  primary: string;   // Main accent (e.g., Gold, Neon Pink)
-  secondary: string; // Secondary accent (e.g., Cyan, Green)
-  bg: string;        // Background base color
+  primary: string;
+  secondary: string;
+  bg: string;
   text: string;
 }
 
 export interface Manager {
   id: string;
   name: string;
-  photoUrl?: string;
   whatsapp: string;
-  responseRate: string; // e.g. "Usually replies in 2 mins"
+  responseRate: string;
   isOnline: boolean;
+}
+
+export interface ClubEvent {
+  id: string;
+  title: string;
+  date: string;
+  dj: string;
+  tags: string[];
 }
 
 export interface Club {
@@ -47,6 +47,8 @@ export interface Club {
   theme: ClubTheme;
   manager: Manager;
   priceRange: string;
+  events: ClubEvent[];
+  coordinates: { lat: number, lng: number }; // For Uber/Maps
 }
 
 export interface Table {
@@ -57,29 +59,19 @@ export interface Table {
   x: number;
   y: number;
   status: TableStatus;
-  minSpend: number; // in EUR
+  minSpend: number;
   capacity: number;
   shape?: 'circle' | 'rect';
-  rotation?: number;
   width?: number;
   height?: number;
-}
-
-export interface Bed {
-  id: string;
-  label: string;
-  x: number;
-  y: number;
   rotation?: number;
-  status: BedStatus;
 }
 
 export interface Bottle {
   id: string;
   name: string;
-  category: 'CHAMPAGNE' | 'VODKA' | 'TEQUILA' | 'WHISKEY' | 'GIN' | 'RUM';
-  price: number; // EUR
-  image?: string;
+  category: string;
+  price: number;
 }
 
 export interface UserProfile {
@@ -87,9 +79,9 @@ export interface UserProfile {
   name: string;
   phone: string;
   instagram?: string;
-  isVerified: boolean;
-  totalSpendHistory: number;
   isAdmin?: boolean;
+  loyaltyTier: 'SILVER' | 'GOLD' | 'PLATINUM' | 'BLACK';
+  loyaltyPoints: number;
 }
 
 export interface CartItem extends Bottle {
@@ -103,4 +95,34 @@ export interface RevenueStats {
   activeTables: number;
 }
 
-export type ViewState = 'CLUBS_OVERVIEW' | 'CLUB_MAP' | 'BOTTLES' | 'ANALYTICS';
+export interface Track {
+  title: string;
+  artist: string;
+  duration: string;
+  isPlaying: boolean;
+}
+
+export type ViewState = 
+  | 'CLUBS_OVERVIEW' 
+  | 'CLUB_MAP' 
+  | 'BOTTLES' 
+  | 'ANALYTICS' 
+  | 'EVENTS' 
+  | 'GUESTLIST' 
+  | 'PASS';
+
+export enum BedStatus {
+  AVAILABLE = 'AVAILABLE',
+  BOOKED = 'BOOKED',
+  OCCUPIED = 'OCCUPIED',
+  MAINTENANCE = 'MAINTENANCE'
+}
+
+export interface Bed {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  rotation?: number;
+  status: BedStatus;
+}
